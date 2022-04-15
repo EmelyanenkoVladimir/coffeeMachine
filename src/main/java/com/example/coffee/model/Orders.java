@@ -18,5 +18,5 @@ public class Orders {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "ordermenu_id")
-    private Ordermenu orderMenu;
+    private OrderMenu orderMenu;
 }

@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование заказа</title>
+    <link href="/webjars/bootstrap/5.1.0/css/bootstrap.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<form  th:action="@{/createNewOrderMenu}" th:object="${orderMenu}" method="post" >
+    <div class="container ms-auto mt-5 fw-bold" >
+        <div class="row mb-3">
+            <label for="typeOfOrder" class="col-sm-2 col-form-label">название кофе</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control w-50" autofocus th:field="*{typeOfOrder}"
+                       id="typeOfOrder">
+                <div style="color:red" th:if="${#fields.hasErrors('typeOfOrder')}" th:errors="*{typeOfOrder}">Name Error</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="quantityOfCoffee" class="col-sm-2 col-form-label">Количество кофе</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control w-50"  th:field="*{quantityOfCoffee}"
+                       id="quantityOfCoffee">
+                <div style="color:red" th:if="${#fields.hasErrors('quantityOfCoffee')}" th:errors="*{quantityOfCoffee}">Name Error</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="quantityOfMilk" class="col-sm-2 col-form-label">Количество молока</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control w-50"  th:field="*{quantityOfMilk}"
+                       id="quantityOfMilk">
+                <div style="color:red" th:if="${#fields.hasErrors('quantityOfMilk')}" th:errors="*{quantityOfMilk}">Name Error</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="quantityOfCream" class="col-sm-2 col-form-label">Количество сливок</label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control w-50"  th:field="*{quantityOfCream}"
+                       id="quantityOfCream">
+                <div style="color:red" th:if="${#fields.hasErrors('quantityOfCream')}" th:errors="*{quantityOfCream}">Name Error</div>
+            </div>
+        </div>
+
+        <input type="submit" class="btn btn-primary mt-2" value="сохранить кофе">
+    </div>
+</form>
+
+<script>
+    function submitLimit() {
+        let btn = document.getElementById('coffeeCreate')
+        setTimeout(function() {
+            btn.setAttribute('disabled', 'disabled');
+        }, 1);
+
+        setTimeout(function() {
+            btn.removeAttribute('disabled');
+        }, 300);}
+</script>
+
+</body>
+</html>

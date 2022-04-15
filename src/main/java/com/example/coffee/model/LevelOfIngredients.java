@@ -3,23 +3,23 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "quantityofingredients")
+@Table(name = "levelofingredients")
 @Data
 @NoArgsConstructor
-public class Quantityofingredients {
+public class LevelOfIngredients {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "level_of_coffee")
-    private String levelOfCoffee;
+    private Integer levelOfCoffee;
 
     @Column(name = "level_of_water")
-    private String levelOfWater;
+    private Integer levelOfWater;
 
     @Column(name = "level_of_milk")
-    private String levelOfMilk;
+    private Integer levelOfMilk;
 
     @Column(name = "level_of_cream")
-    private String levelOfCream;
+    private Integer levelOfCream;
 }

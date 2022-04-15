@@ -1,10 +1,168 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Кофе машина</title>
+    <link href="/webjars/bootstrap/5.1.0/css/bootstrap.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-html5-2.0.1/b-print-2.0.1/sp-1.4.0/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-html5-2.0.1/b-print-2.0.1/sp-1.4.0/datatables.min.js"></script>
+    <link rel="icon" href="/favicon.ico" type="image/ico">	
 </head>
 <body>
-   
+<div class="container-fluid" >
+    <img class ="img-responsive" th:src="@{images/CoffeeMachine.jpg}" alt ="Кофе Машина" width="500px" height="500px">
+    <table>
+        <tbody>
+            <td>
+                <form  th:action="@{/FillTheWater}"  method="post" >
+                    <input type="submit" class="btn btn-primary btn-sm" value="Залить воду" >
+                </form>
+            </td>
+            <td>
+                <form  th:action="@{/FillTheCoffee}"  method="post" >
+                    <input style="color: black" type="submit" class="btn btn-primary btn-sm" value="Засыпать кофе" >
+                </form>
+            </td>
+            <td>
+                <form  th:action="@{/FillTheMilk}"  method="post" >
+                    <input style="color: mintcream" type="submit" class="btn btn-primary btn-sm" value="Залить молока" >
+                </form>
+            </td>
+            <td>
+                <form  th:action="@{/FillTheCream}"  method="post" >
+                    <input style="color: hotpink" type="submit" class="btn btn-primary btn-sm" value="Залить сливки">
+                </form>
+            </td>
+        </tbody>
+    </table>
+    <br>
+    <div th:if="${RefuelingIsNotRequired == 'responseForLevelOfWater'}">Вода не требуется в заправке</div>
+    <div th:if="${RefuelingIsNotRequired == 'responseForLevelOfCoffee'}">Кофе не требуется в заправке</div>
+    <div th:if="${RefuelingIsNotRequired == 'responseForLevelOfMilk'}">Молоко не требуется в заправке</div>
+    <div th:if="${RefuelingIsNotRequired == 'responseForLevelOfCream'}">Сливки не требуются в заправке</div>
+    <div th:if="${AddCoffee == 'responseForLevelCoffee'}">Засыпьте кофе</div>
+    <div th:if="${AddWater == 'responseForLevelWater'}">Залейте воду</div>
+    <div th:if="${AddMilk == 'responseForLevelMilk'}">Залейте молока</div>
+    <div th:if="${AddCream == 'responseForLevelCream'}">Залейте сливки</div>
+    <div th:if="${filterReplacementRequired == 'filterReplacementRequired'}">Требуется замена фильтра</div>
+    <br>
+    <form th:action="@{/rinseWithWater}" method="post">
+        <input style="color:black" type="submit" class="btn btn-info" value="Промыть водой">
+        <div style="color:red" th:if="${response == 'notEnoughLevelOfWater'}">Недостаточный уровень воды для промывки</div>
+    </form>
+    <br>
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>Уровень кофе</th>
+            <th>Уровень воды</th>
+            <th>Уровень молока</th>
+            <th>Уровень сливок</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="level:${levelOfIngredients}">
+            <td th:text="${level.levelOfCoffee}"></td>
+            <td th:text="${level.levelOfWater}"></td>
+            <td th:text="${level.levelOfMilk}"></td>
+            <td th:text="${level.levelOfCream}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#countsModal">
+        Просмотр счётчиков
+    </button>
+    <br>
+    <br>
+    <div>
+        <table>
+            <thead>
+            <th>
+                <a class="btn btn-warning" th:href="@{/createNewCoffee}">Мой кофе</a>
+            </th>
+            </thead>
+            <tbody>
+            <tr th:each="menu : ${orderMenuList}">
+                <td>
+                    <form method="post" th:action="@{/createNewOrder/{idOrderMenu}(idOrderMenu = ${menu.id})}">
+                        <button type="submit" class="btn" th:text="${menu.typeOfOrder}"></button>
+                    </form>
+                </td>
+                <td th:if="${menu.id > 3}">
+                    <a th:href="@{/updateOrderMenu/{idOrderMenu}(idOrderMenu = ${menu.id})}" class="btn btn-dark">Изменить</a>
+                </td>
+                <td th:if="${menu.id > 3}">
+                    <a type="button" class="btn btn-danger" id="deleteButton"
+                       data-bs-toggle="modal" th:attr="data-bs-target='#deleteModal'+${menu.id}" >
+                        Удалить
+                    </a>
+                </td>
+                <div class="modal fade" th:id="deleteModal + ${menu.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Подтверждение удаления</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Вы уверены, что хотите удалить этот кофе?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                                <form th:method="DELETE" th:action="@{/coffee-delete/{id}(id=${menu.id})}">
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="countsModal" tabindex="-1" aria-labelledby="countsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="countsModalLabel">Таблица счётчиков</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Счётчик заказов</th>
+                        <th>Счётчик заправок кофе</th>
+                        <th>Счётчик заправок воды</th>
+                        <th>Счётчик заправок молока</th>
+                        <th>Счётчик заправок сливок</th>
+                        <th>Счётчик замены фильтров</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="count:${counts}">
+                        <td th:text="${count.countOfOrder}"></td>
+                        <td th:text="${count.countOfCoffee}"></td>
+                        <td th:text="${count.countOfWater}"></td>
+                        <td th:text="${count.countOfMilk}"></td>
+                        <td th:text="${count.countOfCream}"></td>
+                        <td th:text="${count.countOfFilter}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

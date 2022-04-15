@@ -20,7 +20,7 @@ public class Counts {
     private Integer countOfCoffee;
 
     @Column(name = "count_of_water")
-    private Integer countOfWaterr;
+    private Integer countOfWater;
 
     @Column(name = "count_of_milk")
     private Integer countOfMilk;
