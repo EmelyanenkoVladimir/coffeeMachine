@@ -1,14 +1,11 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml"
-      xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Кофе машина</title>
     <link href="/webjars/bootstrap/5.1.0/css/bootstrap.css" rel="stylesheet"/>
     <script type="text/javascript" src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/5.1.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-html5-2.0.1/b-print-2.0.1/sp-1.4.0/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-html5-2.0.1/b-print-2.0.1/sp-1.4.0/datatables.min.js"></script>
     <link rel="icon" href="/favicon.ico" type="image/ico">	
 </head>
 <body>
@@ -54,7 +51,7 @@
         <div style="color:red" th:if="${response == 'notEnoughLevelOfWater'}">Недостаточный уровень воды для промывки</div>
     </form>
     <br>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered w-50">
         <thead class="table-light">
         <tr>
             <th>Уровень кофе</th>

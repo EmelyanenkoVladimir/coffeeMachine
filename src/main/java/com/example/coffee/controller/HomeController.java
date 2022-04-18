@@ -51,32 +51,36 @@ public class HomeController {
 
     @PostMapping("createNewOrder/{idOrderMenu}")
     public String orderSelection(@PathVariable("idOrderMenu")  Long idOrderMenu, Model model){
-        OrderMenu orderMenuList = ordermenuService.findById(idOrderMenu);
+        OrderMenu orderMenu = ordermenuService.findById(idOrderMenu);
         LevelOfIngredients levelOfIngredients = levelOfIngredientsService.findById((long)1);
         Counts counts = countsService.findById((long) 1);
 //        Проверка наличия ингредиентов (4 if-a )
-        if(levelOfIngredients.getLevelOfCoffee() - orderMenuList.getQuantityOfCoffee() <= 0 ){
+        if(levelOfIngredients.getLevelOfCoffee() - orderMenu.getQuantityOfCoffee() <= 0 ){
+            OrderMenu orderMenuList = ordermenuService.findById(idOrderMenu);
             model.addAttribute("levelOfIngredients", levelOfIngredients);
             model.addAttribute("orderMenuList", orderMenuList);
             model.addAttribute("counts", counts);
             model.addAttribute("AddCoffee", "responseForLevelCoffee");
             return "HomePage";
         }
-        if(levelOfIngredients.getLevelOfWater() - orderMenuList.getQuantityOfWater() <= 0){
+        if(levelOfIngredients.getLevelOfWater() - orderMenu.getQuantityOfWater() <= 0){
+            OrderMenu orderMenuList = ordermenuService.findById(idOrderMenu);
             model.addAttribute("levelOfIngredients", levelOfIngredients);
             model.addAttribute("orderMenuList", orderMenuList);
             model.addAttribute("counts", counts);
             model.addAttribute("AddWater", "responseForLevelWater");
             return "HomePage";
         }
-        if(levelOfIngredients.getLevelOfMilk() - orderMenuList.getQuantityOfMilk() <= 0){
+        if(levelOfIngredients.getLevelOfMilk() - orderMenu.getQuantityOfMilk() <= 0){
+            OrderMenu orderMenuList = ordermenuService.findById(idOrderMenu);
             model.addAttribute("levelOfIngredients", levelOfIngredients);
             model.addAttribute("orderMenuList", orderMenuList);
             model.addAttribute("counts", counts);
             model.addAttribute("AddMilk", "responseForLevelMilk");
             return "HomePage";
         }
-        if(levelOfIngredients.getLevelOfCream() - orderMenuList.getQuantityOfCream() <= 0){
+        if(levelOfIngredients.getLevelOfCream() - orderMenu.getQuantityOfCream() <= 0){
+            OrderMenu orderMenuList = ordermenuService.findById(idOrderMenu);
             model.addAttribute("levelOfIngredients", levelOfIngredients);
             model.addAttribute("orderMenuList", orderMenuList);
             model.addAttribute("counts", counts);
@@ -85,18 +89,19 @@ public class HomeController {
         }
 
         Orders newOrder  = new Orders();
-        newOrder.setNameOfOrder(orderMenuList.getTypeOfOrder());
-        newOrder.setOrderMenu(orderMenuList);
+        newOrder.setNameOfOrder(orderMenu.getTypeOfOrder());
+        newOrder.setOrderMenu(orderMenu);
         ordersService.saveOrders(newOrder);
         counts.setCountOfOrder(counts.getCountOfOrder() + 1);
         countsService.saveCounts(counts);
 
-        levelOfIngredients.setLevelOfWater(levelOfIngredients.getLevelOfWater() - orderMenuList.getQuantityOfWater());
-        levelOfIngredients.setLevelOfCoffee(levelOfIngredients.getLevelOfCoffee() - orderMenuList.getQuantityOfCoffee());
-        levelOfIngredients.setLevelOfMilk(levelOfIngredients.getLevelOfMilk() - orderMenuList.getQuantityOfMilk());
-        levelOfIngredients.setLevelOfCream(levelOfIngredients.getLevelOfCream() - orderMenuList.getQuantityOfCream());
+        levelOfIngredients.setLevelOfWater(levelOfIngredients.getLevelOfWater() - orderMenu.getQuantityOfWater());
+        levelOfIngredients.setLevelOfCoffee(levelOfIngredients.getLevelOfCoffee() - orderMenu.getQuantityOfCoffee());
+        levelOfIngredients.setLevelOfMilk(levelOfIngredients.getLevelOfMilk() - orderMenu.getQuantityOfMilk());
+        levelOfIngredients.setLevelOfCream(levelOfIngredients.getLevelOfCream() - orderMenu.getQuantityOfCream());
         levelOfIngredientsService.saveLevelOfIngredients(levelOfIngredients);
         if(counts.getCountOfOrder()%100==0) {
+            List<OrderMenu> orderMenuList = ordermenuService.findAll();
             model.addAttribute("filterReplacementRequired", "filterReplacementRequired");
             model.addAttribute("levelOfIngredients", levelOfIngredients);
             model.addAttribute("orderMenuList", orderMenuList);
